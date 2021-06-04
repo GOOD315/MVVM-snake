@@ -1,9 +1,11 @@
-﻿namespace Code.Interface
+﻿using UnityEngine;
+
+namespace Code.Interface
 {
     public interface ISnakeMoveViewModel
     {
-        ISnakeMoveModel _snakeMoveModel { get; }
-        void Rotate();
-        void Move();
+        ISnakeMoveModel SnakeMoveModel { get; }
+        void Rotate(Vector2 rotateVector);
+        void Move(float deltaTime);
     }
 }

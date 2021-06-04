@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using Code.Snake;
+using UnityEngine;
 
-namespace Code.SnakeFactory
+namespace Code
 {
     public interface ISnakeFactory
     {
-         GameObject Create(Sprite head);
+        SnakeHead CreateHead();
+        SnakeElem CreateTale(Vector2 pos);
     }
 }

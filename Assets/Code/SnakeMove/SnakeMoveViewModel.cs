@@ -1,31 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.Snake;
 using UnityEngine;
 
 namespace Code.Interface
 {
     public class SnakeMoveViewModel : ISnakeMoveViewModel
     {
-        public ISnakeMoveModel _snakeMoveModel { get; }
+        private Action onRotate;
+        public ISnakeMoveModel SnakeMoveModel { get; }
 
-        private GameObject _head;
-        private List<GameObject> tale;
+        private SnakeHead _head;
+        private Vector2 moveVector;
 
-        public SnakeMoveViewModel(GameObject head, Action<object> delegat)
+        public SnakeMoveViewModel(SnakeHead head, ISnakeMoveModel snakeMoveModel)
         {
-            delegat += (object f) =>
-            {
-                var ff = 3;
-            };
+            moveVector = Vector2.left;
             _head = head;
+            SnakeMoveModel = snakeMoveModel;
         }
 
-        public void Rotate()
+        public void Rotate(Vector2 rotateVector)
         {
+            if (rotateVector != (Vector2.zero))
+            {
+                moveVector = rotateVector;
+            }
         }
 
-        public void Move()
+        public void Move(float time)
         {
+            // периодичность вызовов - через каждые n(Speed) секунд производить действие и записывать в timeCap
+            // очень коряво, знаю, не было времени придумать получше
+            if (time >= SnakeMoveModel.timeCap)
+            {
+                SnakeMoveModel.timeCap += SnakeMoveModel.Speed;
+                _head.Handle(moveVector);
+            }
         }
     }
 }

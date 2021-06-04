@@ -1,13 +1,37 @@
-﻿using UnityEngine;
+﻿using Code.Snake;
+using UnityEngine;
 
-namespace Code.SnakeFactory
+namespace Code
 {
     public class SnakeFactory : ISnakeFactory
     {
-        public GameObject Create(Sprite head)
+        private GameObject _snakeHead;
+        private GameObject _snakeTale;
+
+        public SnakeFactory(GameObject snakeHead, GameObject snakeTale)
         {
-            var snake = GameObject.Instantiate(head, new Vector3(5, 5, 0), Quaternion.identity);
-            return new GameObject();
+            _snakeHead = snakeHead;
+            _snakeTale = snakeTale;
+        }
+
+        public SnakeHead CreateHead()
+        {
+            //_snakeHead.AddComponent<Collider2D>();
+            var obj = GameObject.Instantiate(_snakeHead, new Vector2(0, 0), Quaternion.identity);
+            //obj.AddComponent<Collider2D>();
+            var scr = obj.GetComponent<SnakeHead>();
+            scr.snakeFactory = this;
+            return scr;
+        }
+
+        public SnakeElem CreateTale(Vector2 pos)
+        {
+            // _snakeTale.AddComponent<Collider2D>();
+            var obj = GameObject.Instantiate(_snakeTale, pos, Quaternion.identity);
+            //obj.AddComponent<Collider2D>();
+            var scr = obj.GetComponent<SnakeElem>();
+            scr.snakeFactory = this;
+            return scr;
         }
     }
 }
