@@ -2,8 +2,8 @@
 
 namespace Code.Interface
 {
-    public interface ISnakeMoveView
+    public class Food : MonoBehaviour
     {
-
+        
     }
 }

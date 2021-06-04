@@ -1,34 +1,43 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Code.Interface;
-using Code.SnakeFactory;
+using Code.snakeTaleSpawner;
 using UnityEngine;
 
-public class Starter : MonoBehaviour
+namespace Code
 {
-    [SerializeField] private Sprite SnakeHead;
-    [SerializeField] private float Speed;
-
-    void Start()
+    public class Starter : MonoBehaviour
     {
-        var factory = new SnakeFactory();
-        var snake = factory.Create(SnakeHead);
+        [SerializeField] private FoodView FoodView;
+
+        [SerializeField] private GameObject Food;
+        [SerializeField] private GameObject SnakeHead;
+        [SerializeField] private GameObject SnakeTale;
+        [SerializeField] private float Speed;
+        private SnakeMoveViewModel _snakeMoveViewModel;
+
+        void Start()
+        {
+            var factory = new SnakeFactory(SnakeHead, SnakeTale);
+            var snake = factory.CreateHead();
+            var snakeSpawner = new TaleSpawner(snake);
+
+            var moveModel = new SnakeMoveModel(Speed);
+            _snakeMoveViewModel = new SnakeMoveViewModel(snake, moveModel);
+
+            var foodModel = new FoodModel(1);
+            var foodViewModel = new FoodViewModel(snake, foodModel, Food);
+            FoodView.Initialize(foodViewModel);
+        }
 
 
-        var moveModel = new SnakeMoveModel(Speed);
-        //var moveViewModel = new SnakeMoveViewModel(SnakeHead);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-}
-
-public class ff
-{
-    static void FF()
-    {
-        Debug.Log("ff");
+        void Update()
+        {
+            _snakeMoveViewModel.Move(Time.time);
+            var x = Input.GetAxisRaw("Horizontal");
+            var y = Input.GetAxisRaw("Vertical");
+            _snakeMoveViewModel.Rotate(new Vector2(x, y));
+        }
     }
 }
